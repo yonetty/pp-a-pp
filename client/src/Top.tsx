@@ -6,6 +6,6 @@ type TopProps = {
 
 export const Top: FunctionComponent<TopProps> = (props: TopProps) => {
   return (
-    <div>{props.message}</div>
+    <div>HELLO, {props.message} !</div>
   )
 }
