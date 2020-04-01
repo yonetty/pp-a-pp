@@ -5,7 +5,7 @@ import { Top } from './Top';
 
 ReactDOM.render(
   <React.StrictMode>
-    <Top message="HOGEHOGE" />
+    <Top />
   </React.StrictMode>,
   document.getElementById('app')
 );

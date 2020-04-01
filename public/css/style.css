@@ -1,0 +1,66 @@
+@charset "UTF-8";
+
+html {
+    font-size: 62.5%;
+}
+*, *::before, *::after {
+    box-sizing: border-box;
+}
+
+body {
+    background: #151515 url('../images/poker.jpg') no-repeat;
+    color: #fff;
+    text-align: center;
+    font-size: 1.4rem;
+    font-family: "Hiragino Kaku Gothic ProN", Meiryo, sans-serif;
+}
+
+.header {
+    margin: 30px 50px;
+}
+
+.header h1 {
+    font-size: 3.5rem;
+    letter-spacing: 3px;
+    padding: 20px 10px 0;
+}
+
+.header .description {
+    color: azure;
+    font-size: 1.8rem;
+    margin: 20px;
+    line-height: 2.0rem;
+}
+
+.openForm {
+    width: 280px;
+    margin: 20px auto 0;
+}
+
+.openForm input {
+    display: block;
+    width: 100%;
+    margin: 10px auto 0;
+    padding: 10px;
+    border: 1px solid rgba(255, 255, 255, 0.4);
+    border-radius: 0;
+    background-color: rgba(255, 255, 255, 0.1);
+    color: #fff;
+    font-size: 1.6rem;
+}
+
+.openForm input::placeholder {
+    color: darkseagreen;
+}
+
+.openForm input[type=submit] {
+    width: 150px;
+    padding: 10px;
+    background-color: rgba(44, 145, 94, 0.6);
+    cursor: pointer;
+}
+
+.openForm input[type=submit]:hover {
+    background-color: rgba(44, 145, 94, 0.4);
+}
+
