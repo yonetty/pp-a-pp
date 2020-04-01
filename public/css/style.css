@@ -8,7 +8,7 @@ html {
 }
 
 body {
-    background: #151515 url('../images/poker.jpg') no-repeat;
+    background: #151515 url('../images/poker.jpg') no-repeat center top;
     color: #fff;
     text-align: center;
     font-size: 1.4rem;
