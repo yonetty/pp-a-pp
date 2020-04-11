@@ -4,7 +4,7 @@ export const Top: FunctionComponent = () => {
   return (
     <>
       <header className="header">
-        <h1 className="title">Planning Poker App</h1>
+        <h1 className="title">Planning Poker</h1>
         <p className="description">
           チームメンバーでプラニング・ポーカーを行いましょう!<br />
             場名とニックネームを入力して開始します
