@@ -33,6 +33,124 @@ body {
     line-height: 2.0rem;
 }
 
+.table-name {
+    font-size: 2.0rem;
+    letter-spacing: 1px;
+}
+
+.parent-operations button {
+    width: 150px;
+    padding: 10px;
+    margin: 5px 5px;
+    border: 1px solid rgba(255, 255, 255, 0.4);
+    border-radius: 0;
+    background-color: rgba(44, 145, 94, 0.6);
+    color: #fff;
+    font-size: 1.6rem;
+    cursor: pointer;
+}
+
+.game-result {
+    display: inline-block;
+    margin: 5px 5px;
+    width: 150px;
+    padding: 10px;
+    font-size: 2.0rem;
+    background-color: rgba(15, 86, 88, 0.6);
+}
+
+.players {
+    max-width: 1000px;
+    margin: 10px auto;
+    display: flex;
+    flex-direction: row;
+    flex-wrap: wrap;
+    justify-content: flex-start;
+    align-content: flex-start;
+}
+
+.player {
+    margin: 5px 5px;
+    background-color: rgba(15, 86, 88, 0.6);
+    border-radius: 1px;
+    display: flex;
+    justify-content: center;
+    align-items: center;
+}
+
+.player-info {
+    width: 60px;
+    margin: 8px 8px;
+    position: relative;
+}
+
+.player-icon-1 {
+    width: 56px;
+    height: 56px;
+    margin: 0 auto;
+    background-image: url('../images/person-1.png');
+    background-repeat:no-repeat;
+    background-size: cover;
+}
+
+.player-icon-2{
+    width: 56px;
+    height: 56px;
+    margin: 0 auto;
+    background-image: url('../images/person-2.png');
+    background-repeat:no-repeat;
+    background-size: cover;
+}
+
+.player-icon-3 {
+    width: 56px;
+    height: 56px;
+    margin: 0 auto;
+    background-image: url('../images/person-3.png');
+    background-repeat:no-repeat;
+    background-size: cover;
+}
+
+.player-icon-4 {
+    width: 56px;
+    height: 56px;
+    margin: 0 auto;
+    background-image: url('../images/person-4.png');
+    background-repeat:no-repeat;
+    background-size: cover;
+}
+
+.player-name {
+    position: absolute;
+    width: 60px;
+    height: 48px;
+    overflow: hidden;
+    padding: 5px;
+    top: 60px;
+    font-size: 1.5rem;
+}
+
+.player-card {
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    width: 95px;
+    height: 150px;
+    margin: 8px 8px;
+    background-color: chocolate;
+    border: 5px solid;
+    border-radius: 10px;
+    border-color: #fff;
+    display: flex;
+    justify-content: center;
+    align-items: center;
+}
+
+.player-card .point {
+
+    font-size: 8.0rem;
+}
+
 .openForm {
     width: 280px;
     margin: 20px auto 0;
