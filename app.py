@@ -11,5 +11,11 @@ def index():
     return html
 
 
+@app.route("/test")
+def table():
+    html = render_template("table.html")
+    return html
+
+
 if __name__ == "__main__":
     app.run()

@@ -1,11 +1,11 @@
 import React from 'react';
 import ReactDOM from 'react-dom';
-import { Top } from './Top';
+import { TablePage } from './TablePage';
 //import * as serviceWorker from './serviceWorker';
 
 ReactDOM.render(
   <React.StrictMode>
-    <Top />
+    <TablePage tableName="テストチーム" />
   </React.StrictMode>,
   document.getElementById('app')
 );

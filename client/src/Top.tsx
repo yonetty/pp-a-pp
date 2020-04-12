@@ -1,22 +1,16 @@
-import React, { FunctionComponent, useState } from "react";
+import React from 'react';
+import ReactDOM from 'react-dom';
+import { TopPage } from './TopPage';
+//import * as serviceWorker from './serviceWorker';
 
-export const Top: FunctionComponent = () => {
-  return (
-    <>
-      <header className="header">
-        <h1 className="title">Planning Poker</h1>
-        <p className="description">
-          チームメンバーでプラニング・ポーカーを行いましょう!<br />
-            場名とニックネームを入力して開始します
-        </p>
-      </header>
-      <main>
-        <form className="openForm" action="#">
-          <input id="tebleName" type="text" required placeholder="場名" />
-          <input id="nickname" type="text" required placeholder="ニックネーム" />
-          <input type="submit" value="場を開く" />
-        </form>
-      </main>
-    </>
-  )
-}
+ReactDOM.render(
+  <React.StrictMode>
+    <TopPage />
+  </React.StrictMode>,
+  document.getElementById('app')
+);
+
+// If you want your app to work offline and load faster, you can change
+// unregister() to register() below. Note this comes with some pitfalls.
+// Learn more about service workers: https://bit.ly/CRA-PWA
+//serviceWorker.unregister();

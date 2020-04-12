@@ -2,10 +2,13 @@ const path = require('path')
 
 module.exports = {
     mode: "development",
-    entry: "./src/index.tsx",
+    entry: {
+        top: "./src/top.tsx",
+        table: "./src/table.tsx",
+    },
     output: {
         path: path.resolve(__dirname, 'dist/js'),
-        filename: "bundle.js"
+        filename: "[name].bundle.js"
     },
     module: {
         rules: [
