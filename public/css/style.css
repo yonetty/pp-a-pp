@@ -80,7 +80,7 @@ body {
 
 .player-info {
     width: 60px;
-    margin: 8px 8px;
+    margin: 5px 5px;
     position: relative;
 }
 
@@ -134,8 +134,8 @@ body {
     display: flex;
     justify-content: center;
     align-items: center;
-    width: 95px;
-    height: 150px;
+    width: 92px;
+    height: 140px;
     margin: 8px 8px;
     background: linear-gradient(-135deg, #ee7919, rgb(237, 240, 52));
     border: 5px solid;
