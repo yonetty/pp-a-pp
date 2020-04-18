@@ -137,7 +137,7 @@ body {
     width: 92px;
     height: 140px;
     margin: 8px 8px;
-    background: linear-gradient(-135deg, #ee7919, rgb(237, 240, 52));
+    background: linear-gradient(-135deg, #130469, rgb(12, 78, 139));
     border: 5px solid;
     border-radius: 10px;
     border-color: #fff;
@@ -146,7 +146,41 @@ body {
     align-items: center;
 }
 
+.player-card-open {
+    background: linear-gradient(-135deg, #3919ee, rgb(83, 152, 216));
+}
+
 .player-card .point {
+    font-size: 8.0rem;
+}
+
+.deck {
+    width: 350px;
+    background-color: rgba(35, 112, 35, 0.8);
+    display: flex;
+    flex-direction: row;
+    flex-wrap: wrap;
+    justify-content: center;
+    align-content: center;
+}
+
+.deck-card {
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    width: 92px;
+    height: 140px;
+    margin: 8px 8px;
+    background: linear-gradient(-135deg, #df651f, rgb(210, 230, 97));
+    border: 5px solid;
+    border-radius: 10px;
+    border-color: #fff;
+    display: flex;
+    justify-content: center;
+    align-items: center;
+}
+
+.deck-card .point {
     font-size: 8.0rem;
 }
 

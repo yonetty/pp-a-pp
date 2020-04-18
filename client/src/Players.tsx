@@ -1,14 +1,19 @@
 import React, { FunctionComponent, useState } from "react";
-import { Player } from "./Player";
+import { Player, PlayerProps } from "./Player";
 
-export const Players: FunctionComponent = () => {
+type PlayersProps = {
+  players: PlayerProps[];
+}
+
+export const Players: FunctionComponent<PlayersProps> = (props) => {
+  const players = props.players.map((player) => {
+    return (
+      <Player {...player} />
+    );
+  });
   return (
     <div className="players">
-      <Player name="信長" icon={1} bid="2" />
-      <Player name="羽柴秀吉" icon={2} bid="3" />
-      <Player name="家康" icon={3} bid="4" />
-      <Player name="政宗" icon={4} bid="2" />
-      <Player name="幸村" icon={1} bid="3" />
+      {players}
     </div>
   )
 }
