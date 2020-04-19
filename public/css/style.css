@@ -50,6 +50,10 @@ body {
     cursor: pointer;
 }
 
+.parent-operations button:disabled {
+    background-color: rgba(64, 75, 69, 0.6);
+}
+
 .game-result {
     display: inline-block;
     margin: 5px 5px;

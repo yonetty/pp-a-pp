@@ -23,11 +23,12 @@ export type PlayerProps = {
   icon: number;
   bid: string;
   open: boolean;
+  onBidChange: (bid: string) => void;
 }
 
 export const Player: FunctionComponent<PlayerProps> = (props) => {
   const [modalIsOpen, setModalIsOpen] = useState(false);
-  const [bid, setBid] = useState(props.bid);
+  //const [bid, setBid] = useState(props.bid);
   const points = ["0", "1", "2", "3", "5", "8"];
 
   const handleModalOpen = () => {
@@ -39,9 +40,12 @@ export const Player: FunctionComponent<PlayerProps> = (props) => {
   }
 
   const handleCardSelect = (point: string) => {
-    setBid(point);
+    //setBid(point);
     setModalIsOpen(false);
+    props.onBidChange(point);
   }
+
+  const playerCardOpen = props.open ? "player-card-open" : "";
 
   return (
     <div className="player">
@@ -50,8 +54,8 @@ export const Player: FunctionComponent<PlayerProps> = (props) => {
         </div>
         <div className="player-name">{props.name}</div>
       </div>
-      <div className="player-card" onClick={handleModalOpen}>
-        <span className="point">{bid}</span>
+      <div className={`player-card ${playerCardOpen}`} onClick={handleModalOpen}>
+        <span className="point">{props.bid}</span>
       </div>
       <Modal isOpen={modalIsOpen} onRequestClose={handleModalClose}
         contentLabel="test" style={customStyles} >
