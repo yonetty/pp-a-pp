@@ -5,6 +5,7 @@ import { Players } from "./Players";
 
 type TableProps = {
   tableName: string;
+  playerName: string;
 }
 
 export const TablePage: FunctionComponent<TableProps> = (props) => {

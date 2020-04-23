@@ -3,9 +3,11 @@ import ReactDOM from 'react-dom';
 import { TablePage } from './TablePage';
 //import * as serviceWorker from './serviceWorker';
 
+declare var tableProps: any;
+
 ReactDOM.render(
   <React.StrictMode>
-    <TablePage tableName="テストチーム" />
+    <TablePage {...tableProps} />
   </React.StrictMode>,
   document.getElementById('app')
 );
