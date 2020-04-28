@@ -1,4 +1,4 @@
-import React, { FunctionComponent, useState } from "react";
+import React, { FunctionComponent, useState, useEffect } from "react";
 import { ParentOperations } from "./ParentOperations";
 import { GameResults } from "./GameResults";
 import { Players } from "./Players";
@@ -14,6 +14,26 @@ type TableProps = {
 export const TablePage: FunctionComponent<TableProps> = (props) => {
   const [bidding, setBidding] = useState(true);
   const [players, setPlayers] = useState<PlayerProps[]>([]);
+
+  useEffect(() => {
+    axios.get(`/table/${props.tableId}/players`)
+      .then((res) => {
+        const players: PlayerProps[] =
+          res.data.players.map((p: string) => {
+            return {
+              name: p,
+              icon: 1,
+              bid: "",
+              open: false,
+            }
+          });
+        console.log(`Got ${players.length} players by ajax call.`)
+        setPlayers(players);
+      }).catch((error) => {
+        console.log("通信失敗")
+        console.log(error.status);
+      });
+  });
 
   const handleOpen = () => {
     const ps = players.slice();
@@ -34,30 +54,10 @@ export const TablePage: FunctionComponent<TableProps> = (props) => {
 
   const handleBidChange = (bid: string, idx: number) => {
     const ps = players.slice();
-    console.log('handleBidChange')
-    debugger;
+    console.log('handleBidChange was called.')
     ps[idx].bid = bid;
     setPlayers(ps);
   }
-
-  axios.get(`/table/${props.tableId}/players`)
-    .then((res) => {
-      const players: PlayerProps[] =
-        res.data.players.map((p: string) => {
-          return {
-            name: p,
-            icon: 1,
-            bid: "9",
-            open: false,
-          }
-        });
-      console.log('ajax get')
-      debugger;
-      setPlayers(players);
-    }).catch((error) => {
-      console.log("通信失敗")
-      console.log(error.status);
-    });
 
   return (
     <>
