@@ -33,7 +33,7 @@ export const TablePage: FunctionComponent<TableProps> = (props) => {
         console.log("通信失敗")
         console.log(error.status);
       });
-  });
+  }, []);
 
   const handleOpen = () => {
     const ps = players.slice();
