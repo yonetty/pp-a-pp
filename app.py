@@ -1,6 +1,6 @@
 # -*- coding: utf-8 -*-
 
-from flask import Flask, render_template, request, redirect
+from flask import Flask, render_template, request, redirect, jsonify
 import uuid
 
 app = Flask(__name__, static_folder="public", static_url_path="/")
@@ -29,8 +29,16 @@ def table(table_id):
     table = tables[table_id]
     table_name = table["NAME"]
     player_name = table["PARENT"]
-    html = render_template("table.html", table_name=table_name, player_name=player_name)
+    html = render_template(
+        "table.html", table_id=table_id, table_name=table_name, player_name=player_name
+    )
     return html
+
+
+@app.route("/table/<table_id>/players")
+def players(table_id):
+    players = ["今川義元"]
+    return jsonify({"players": players})
 
 
 @app.route("/test")
