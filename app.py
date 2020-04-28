@@ -19,7 +19,13 @@ def open():
     table_name = request.form["tablename"]
     parent_name = request.form["nickname"]
     table_id = str(uuid.uuid4())
-    table = {"ID": table_id, "NAME": table_name, "PARENT": parent_name}
+    players = [parent_name]
+    table = {
+        "ID": table_id,
+        "NAME": table_name,
+        "PARENT": parent_name,
+        "PLAYERS": players,
+    }
     tables[table_id] = table
     return redirect(f"/table/{table_id}")
 
@@ -37,7 +43,8 @@ def table(table_id):
 
 @app.route("/table/<table_id>/players")
 def players(table_id):
-    players = ["今川義元"]
+    table = tables[table_id]
+    players = table["PLAYERS"]
     return jsonify({"players": players})
 
 
