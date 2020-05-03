@@ -19,10 +19,10 @@ export const TablePage: FunctionComponent<TableProps> = (props) => {
     axios.get(`/table/${props.tableId}/players`)
       .then((res) => {
         const players: PlayerProps[] =
-          res.data.players.map((p: string) => {
+          res.data.players.map((p: string, idx: number) => {
             return {
               name: p,
-              icon: 1,
+              icon: (idx + 1) % 4,
               bid: "",
               open: false,
             }

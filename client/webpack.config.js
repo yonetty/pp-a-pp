@@ -5,6 +5,7 @@ module.exports = {
     entry: {
         top: "./src/top.tsx",
         table: "./src/table.tsx",
+        join: "./src/join.tsx",
     },
     output: {
         path: path.resolve(__dirname, 'dist/js'),

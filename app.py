@@ -66,10 +66,26 @@ def players(table_id):
     return jsonify({"players": player_names})
 
 
-@app.route("/test")
-def testtable():
-    html = render_template("table.html")
+@app.route("/table/<table_id>/join", methods=["GET"])
+def join_init(table_id):
+    table = tables[table_id]  # 場の情報
+
+    table_name = table["NAME"]
+    html = render_template("join.html", table_id=table_id, table_name=table_name)
     return html
+
+
+@app.route("/table/<table_id>/join", methods=["POST"])
+def join_do(table_id):
+    player_name = request.form["nickname"]
+
+    table = tables[table_id]  # 場の情報
+    players = table["PLAYERS"]
+    player_id = len(players) + 1  # 現在の人数+1
+    player = (player_id, player_name)
+    players.append(player)
+    session["ses_player_id"] = table_id + "." + str(player_id)
+    return redirect(f"/table/{table_id}")
 
 
 if __name__ == "__main__":
