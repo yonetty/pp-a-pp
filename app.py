@@ -50,7 +50,7 @@ def table(table_id):
 
     table_name = table["NAME"]
     players = table["PLAYERS"]
-    player_name = next(name for (id, name) in players if id == player_id)
+    player_name = next((name for (id, name) in players if id == player_id), None)
     if not player_name:
         return redirect("/")  # ここに到達することはないはず
 
