@@ -38,11 +38,13 @@ export const TablePage: FunctionComponent<TableProps> = (props) => {
         const players = mapPlayers(res.data.players);
         console.log(`Got ${players.length} players by ajax call.`)
         setPlayers(players);
-        //socket.emit("join", props.tableId);
       }).catch((error) => {
         console.log("通信失敗")
         console.log(error.status);
       });
+    return () => {
+      socket.close();
+    }
   }, []);
 
   useEffect(() => {

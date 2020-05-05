@@ -38,11 +38,14 @@ def open():
 @app.route("/table/<table_id>", methods=["GET"])
 def table(table_id):
     if not table_id in tables:
+        print(f"table id {table_id} not found, redirecting to top page...")
         return redirect("/")
     if not "ses_player_id" in session:
+        print("session not found, redirecting to top page...")
         return redirect(f"/table/{table_id}/join")  # 新しいプレイヤー
     ses_table_id, ses_player_id = session["ses_player_id"].split(".")
     if ses_table_id != table_id:
+        print(f"joinning new table {table_id}")
         return redirect(f"/table/{table_id}/join")  # 別の場に新しいプレイヤーとして参加
     player_id = int(ses_player_id)
 
@@ -52,6 +55,7 @@ def table(table_id):
     players = table["PLAYERS"]
     player_name = next((name for (id, name) in players if id == player_id), None)
     if not player_name:
+        print("no players.")
         return redirect("/")  # ここに到達することはないはず
 
     html = render_template(
@@ -88,7 +92,6 @@ def join_do(table_id):
     players.append(player)
     session["ses_player_id"] = table_id + "." + str(player_id)
 
-    print("##########")
     broadcast_join(players)
 
     return redirect(f"/table/{table_id}")
