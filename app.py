@@ -1,10 +1,12 @@
 # -*- coding: utf-8 -*-
 
 from flask import Flask, render_template, request, redirect, jsonify, session
+from flask_socketio import SocketIO, emit
 import uuid
 
 app = Flask(__name__, static_folder="public", static_url_path="/")
 app.secret_key = "planningpoker"
+socketio = SocketIO(app)
 # The session is unavailable because no secret key was set. Set the secret_key on the application to something unique and secret.
 
 tables = {}
@@ -85,8 +87,23 @@ def join_do(table_id):
     player = (player_id, player_name)
     players.append(player)
     session["ses_player_id"] = table_id + "." + str(player_id)
+
+    print("##########")
+    broadcast_join(players)
+
     return redirect(f"/table/{table_id}")
 
 
+# Web sockets event handlers
+
+
+def broadcast_join(players):
+    print("broadcasting on player joinning..")
+    player_names = [name for (id, name) in players]
+    payload = {"players": player_names}
+    socketio.emit("update", payload, broadcast=True)
+
+
 if __name__ == "__main__":
-    app.run(debug=True)
+    # app.run(debug=True)
+    socketio.run(app, debug=True)
