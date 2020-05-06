@@ -1,15 +1,28 @@
 # -*- coding: utf-8 -*-
-
+import os
+import redis
 from flask import Flask, render_template, request, redirect, jsonify, session
 from flask_socketio import SocketIO, emit
 import uuid
 
 app = Flask(__name__, static_folder="public", static_url_path="/")
 app.secret_key = "planningpoker"
-socketio = SocketIO(app)
-# The session is unavailable because no secret key was set. Set the secret_key on the application to something unique and secret.
 
-tables = {}
+# SocketIO
+socketio = SocketIO(app)
+
+# Redis
+REDIS_URL = (
+    os.environ.get("REDIS_URL")
+    if os.environ.get("REDIS_URL") != None
+    else "redis://localhost:6379"
+)
+DATABASE_INDEX = 1
+pool = redis.ConnectionPool.from_url(
+    REDIS_URL, db=DATABASE_INDEX, decode_responses=True
+)
+db = redis.StrictRedis(connection_pool=pool)
+EX = 86400  # 1日
 
 
 @app.route("/")
@@ -23,21 +36,22 @@ def open():
     table_name = request.form["tablename"]
     parent_name = request.form["nickname"]
     table_id = str(uuid.uuid4())
-    player_id = 1  # 親を1とする
-    players = [(player_id, parent_name)]
-    table = {
-        "ID": table_id,
-        "NAME": table_name,
-        "PLAYERS": players,
-    }
-    tables[table_id] = table
+    player_id = 0  # 親は0とする
+    db.hset(table_id, "name", table_name)
+    db.hset(table_id, "players", parent_name)
+    db.expire(table_id, EX)
+    print(f"new table opened: {table_id}")
     session["ses_player_id"] = table_id + "." + str(player_id)
     return redirect(f"/table/{table_id}")
 
 
 @app.route("/table/<table_id>", methods=["GET"])
 def table(table_id):
-    if not table_id in tables:
+    table = db.hgetall(table_id)
+    print("#########")
+    print(table)
+    print("#########")
+    if not table:
         print(f"table id {table_id} not found, redirecting to top page...")
         return redirect("/")
     if not "ses_player_id" in session:
@@ -49,14 +63,12 @@ def table(table_id):
         return redirect(f"/table/{table_id}/join")  # 別の場に新しいプレイヤーとして参加
     player_id = int(ses_player_id)
 
-    table = tables[table_id]  # 場の情報
-
-    table_name = table["NAME"]
-    players = table["PLAYERS"]
-    player_name = next((name for (id, name) in players if id == player_id), None)
-    if not player_name:
-        print("no players.")
+    table_name = table["name"]
+    players = table["players"]
+    players_list = players.split(",")
+    if len(players_list) <= player_id:
         return redirect("/")  # ここに到達することはないはず
+    player_name = players_list[player_id]
 
     html = render_template(
         "table.html", table_id=table_id, table_name=table_name, player_name=player_name
@@ -66,17 +78,17 @@ def table(table_id):
 
 @app.route("/table/<table_id>/players")
 def players(table_id):
-    table = tables[table_id]
-    players = table["PLAYERS"]
-    player_names = [name for (id, name) in players]
+    table = db.hgetall(table_id)
+    players = table["players"]
+    player_names = players.split(",")
     return jsonify({"players": player_names})
 
 
 @app.route("/table/<table_id>/join", methods=["GET"])
 def join_init(table_id):
-    table = tables[table_id]  # 場の情報
+    table = db.hgetall(table_id)
 
-    table_name = table["NAME"]
+    table_name = table["name"]
     html = render_template("join.html", table_id=table_id, table_name=table_name)
     return html
 
@@ -85,14 +97,18 @@ def join_init(table_id):
 def join_do(table_id):
     player_name = request.form["nickname"]
 
-    table = tables[table_id]  # 場の情報
-    players = table["PLAYERS"]
-    player_id = len(players) + 1  # 現在の人数+1
-    player = (player_id, player_name)
-    players.append(player)
+    table = db.hgetall(table_id)
+    players = table["players"]
+    players_list = players.split(",")
+    player_id = len(players_list)
+    players_list.append(player_name)
+    players = ",".join(players_list)
+
+    db.hset(table_id, "players", players)
+
     session["ses_player_id"] = table_id + "." + str(player_id)
 
-    broadcast_join(players)
+    broadcast_join(players_list)
 
     return redirect(f"/table/{table_id}")
 
@@ -100,10 +116,9 @@ def join_do(table_id):
 # Web sockets event handlers
 
 
-def broadcast_join(players):
+def broadcast_join(players_list):
     print("broadcasting on player joinning..")
-    player_names = [name for (id, name) in players]
-    payload = {"players": player_names}
+    payload = {"players": players_list}
     socketio.emit("update", payload, broadcast=True)
 
 
