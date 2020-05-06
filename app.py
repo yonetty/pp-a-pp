@@ -48,9 +48,9 @@ def open():
 @app.route("/table/<table_id>", methods=["GET"])
 def table(table_id):
     table = db.hgetall(table_id)
-    print("#########")
-    print(table)
-    print("#########")
+    # print("#########")
+    # print(table)
+    # print("#########")
     if not table:
         print(f"table id {table_id} not found, redirecting to top page...")
         return redirect("/")
