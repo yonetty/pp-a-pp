@@ -9,7 +9,7 @@ app = Flask(__name__, static_folder="public", static_url_path="/")
 app.secret_key = "planningpoker"
 
 # SocketIO
-socketio = SocketIO(app, engineio_logger=app.logger)
+socketio = SocketIO(app, engineio_logger=app.logger, async_mode="eventlet")
 
 # Redis
 REDIS_URL = (
