@@ -48,9 +48,6 @@ def open():
 @app.route("/table/<table_id>", methods=["GET"])
 def table(table_id):
     table = db.hgetall(table_id)
-    # print("#########")
-    # print(table)
-    # print("#########")
     if not table:
         print(f"table id {table_id} not found, redirecting to top page...")
         return redirect("/")
@@ -68,10 +65,8 @@ def table(table_id):
     players_list = players.split(",")
     if len(players_list) <= player_id:
         return redirect("/")  # ここに到達することはないはず
-    player_name = players_list[player_id]
-
     html = render_template(
-        "table.html", table_id=table_id, table_name=table_name, player_name=player_name
+        "table.html", table_id=table_id, table_name=table_name, player_id=player_id
     )
     return html
 

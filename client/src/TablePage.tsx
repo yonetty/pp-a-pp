@@ -9,16 +9,17 @@ import io from 'socket.io-client';
 type TableProps = {
   tableId: string;
   tableName: string;
-  playerName: string;
+  playerId: number;
 }
 
 const socket: SocketIOClient.Socket = io();
 
-const mapPlayers = (names: string[]) => {
+const mapPlayers = (names: string[], myId: number) => {
   const players: PlayerProps[] =
     names.map((n: string, idx: number) => {
       return {
         name: n,
+        isMe: idx === myId,
         icon: (idx + 1) % 4,
         bid: "",
         open: false,
@@ -33,9 +34,10 @@ export const TablePage: FunctionComponent<TableProps> = (props) => {
   const [players, setPlayers] = useState<PlayerProps[]>([]);
 
   useEffect(() => {
+    console.log('Player id is ' + props.playerId);
     axios.get(`/table/${props.tableId}/players`)
       .then((res) => {
-        const players = mapPlayers(res.data.players);
+        const players = mapPlayers(res.data.players, props.playerId);
         console.log(`Got ${players.length} players by ajax call.`)
         setPlayers(players);
       }).catch((error) => {
@@ -49,7 +51,7 @@ export const TablePage: FunctionComponent<TableProps> = (props) => {
 
   useEffect(() => {
     socket.on("update", (data: any) => {
-      const players = mapPlayers(data.players);
+      const players = mapPlayers(data.players, props.playerId);
       console.log(`Got ${players.length} players on receiving an update event.`)
       setPlayers(players);
     });
