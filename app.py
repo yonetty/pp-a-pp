@@ -120,6 +120,7 @@ def broadcast_join(player_id, player_name):
 @socketio.on("bidding")
 def handle_bidding(player_id, bid):
     payload = {"playerId": player_id, "bid": bid}
+    print(f"Player {player_id} has made a bid of {bid}, broadcasting...")
     emit("bidded", payload, broadcast=True)
 
 
