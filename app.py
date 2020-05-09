@@ -111,6 +111,11 @@ def join_do(table_id):
 # Web sockets event handlers
 
 
+@socketio.on("connect")
+def connect():
+    print("Client connected")
+
+
 def broadcast_join(player_id, player_name):
     print("broadcasting on player joinning..")
     payload = {"playerId": player_id, "playerName": player_name}
