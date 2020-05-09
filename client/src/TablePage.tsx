@@ -5,6 +5,7 @@ import { Players } from "./Players";
 import { PlayerProps } from "./Player";
 import axios from 'axios';
 import io from 'socket.io-client';
+import { join } from "path";
 
 type TableProps = {
   tableId: string;
@@ -16,17 +17,19 @@ const socket: SocketIOClient.Socket = io();
 
 const mapPlayers = (names: string[], myId: number) => {
   const players: PlayerProps[] =
-    names.map((n: string, idx: number) => {
-      return {
-        name: n,
-        isMe: idx === myId,
-        icon: (idx + 1) % 4,
-        bid: "",
-        open: false,
-        onBidChange: (x) => { },
-      }
-    });
+    names.map((n: string, idx: number) => mapPlayer(n, idx === myId, idx));
   return players;
+}
+
+const mapPlayer = (name: string, isMe: boolean, pos: number) => {
+  return {
+    name: name,
+    isMe: isMe,
+    icon: (pos + 1) % 4,
+    bid: "",
+    open: false,
+    onBidChange: (x: string) => { },
+  }
 }
 
 export const TablePage: FunctionComponent<TableProps> = (props) => {
@@ -34,7 +37,6 @@ export const TablePage: FunctionComponent<TableProps> = (props) => {
   const [players, setPlayers] = useState<PlayerProps[]>([]);
 
   useEffect(() => {
-    console.log('Player id is ' + props.playerId);
     axios.get(`/table/${props.tableId}/players`)
       .then((res) => {
         const players = mapPlayers(res.data.players, props.playerId);
@@ -50,12 +52,30 @@ export const TablePage: FunctionComponent<TableProps> = (props) => {
   }, []);
 
   useEffect(() => {
-    socket.on("update", (data: any) => {
-      const players = mapPlayers(data.players, props.playerId);
-      console.log(`Got ${players.length} players on receiving an update event.`)
-      setPlayers(players);
+    socket.on("joined", (data: any) => {
+      console.log(`${data.playerName} has joined (ID=${data.playerId})`);
+      const joined = mapPlayer(data.playerName, false, data.playerId);
+      const updatedPlayers = players.slice();
+      updatedPlayers.push(joined);
+      setPlayers(updatedPlayers);
     });
-  }, []);
+    return () => {
+      socket.off("joined");
+    }
+  }, [players]);
+
+  useEffect(() => {
+    socket.on("bidded", (data: any) => {
+      console.log(`Player ${data.playerId} has changed the bid: ${data.bid}`);
+      const idx: number = data.playerId;
+      const updatedPlayer = { ...players[idx], ...{ bid: data.bid } };
+      const updatedPlayers = players.map((p, i) => i === idx ? updatedPlayer : p);
+      setPlayers(updatedPlayers);
+    });
+    return () => {
+      socket.off("bidded");
+    }
+  }, [players]);
 
   const handleOpen = () => {
     const ps = players.slice();
@@ -79,6 +99,9 @@ export const TablePage: FunctionComponent<TableProps> = (props) => {
     console.log('handleBidChange was called.')
     ps[idx].bid = bid;
     setPlayers(ps);
+    setTimeout(() => {
+      socket.emit("bidding", idx, bid);
+    }, 0);
   }
 
   return (

@@ -31,7 +31,6 @@ export const Player: FunctionComponent<PlayerProps> = (props) => {
   const [modalIsOpen, setModalIsOpen] = useState(false);
   //const [bid, setBid] = useState(props.bid);
   const points = ["0", "1", "2", "3", "5", "8"];
-  console.log("isMe ? " + props.isMe);
 
   const handleModalOpen = () => {
     setModalIsOpen(true);
@@ -47,19 +46,20 @@ export const Player: FunctionComponent<PlayerProps> = (props) => {
     props.onBidChange(point);
   }
 
+  const playerIsMe = props.isMe ? "player-me" : "";
   const playerCardOpen = props.open ? "player-card-open" : "";
-  // onClick={props.isMe ? handleModalOpen : null
-  //<div className={`player-card ${playerCardOpen}`} {...(props.isMe && { onClick: handleModalOpen })}></div>
+  // オープン前で入力済みの他ユーザーは?を表示する
+  const point = (!props.open && !props.isMe && props.bid) ? "?" : props.bid;
 
   return (
-    <div className="player">
+    <div className={`player ${playerIsMe}`}>
       <div className="player-info">
         <div className={"player-icon-" + props.icon}>
         </div>
         <div className="player-name">{props.name}</div>
       </div>
       <div className={`player-card ${playerCardOpen}`} onClick={props.isMe ? handleModalOpen : undefined}>
-        <span className="point">{props.bid}</span>
+        <span className="point">{point}</span>
       </div>
       <Modal isOpen={modalIsOpen} onRequestClose={handleModalClose}
         contentLabel="test" style={customStyles} >

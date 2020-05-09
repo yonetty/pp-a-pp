@@ -82,6 +82,10 @@ body {
     align-items: center;
 }
 
+.player-me {
+    background-color: rgba(27, 184, 66, 0.6);
+}
+
 .player-info {
     width: 60px;
     margin: 5px 5px;

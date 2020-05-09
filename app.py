@@ -103,7 +103,7 @@ def join_do(table_id):
 
     session["ses_player_id"] = table_id + "." + str(player_id)
 
-    broadcast_join(players_list)
+    broadcast_join(player_id, player_name)
 
     return redirect(f"/table/{table_id}")
 
@@ -111,10 +111,16 @@ def join_do(table_id):
 # Web sockets event handlers
 
 
-def broadcast_join(players_list):
+def broadcast_join(player_id, player_name):
     print("broadcasting on player joinning..")
-    payload = {"players": players_list}
-    socketio.emit("update", payload, broadcast=True)
+    payload = {"playerId": player_id, "playerName": player_name}
+    socketio.emit("joined", payload, broadcast=True)
+
+
+@socketio.on("bidding")
+def handle_bidding(player_id, bid):
+    payload = {"playerId": player_id, "bid": bid}
+    emit("bidded", payload, broadcast=True)
 
 
 if __name__ == "__main__":
