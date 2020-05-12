@@ -34,6 +34,7 @@ const mapPlayer = (name: string, isMe: boolean, pos: number) => {
 
 export const TablePage: FunctionComponent<TableProps> = (props) => {
   const [bidding, setBidding] = useState(true);
+  const [showsResults, setShowsResults] = useState(false);
   const [players, setPlayers] = useState<PlayerProps[]>([]);
 
   useEffect(() => {
@@ -77,21 +78,47 @@ export const TablePage: FunctionComponent<TableProps> = (props) => {
     }
   }, [players]);
 
+  useEffect(() => {
+    socket.on("opened", (data: any) => {
+      console.log("The parent player has opened cards.");
+      const updatedPlayers = players.slice();
+      updatedPlayers.forEach(p => p.open = true);
+      setPlayers(updatedPlayers);
+      setBidding(false);
+      setShowsResults(true);
+    });
+    return () => {
+      socket.off("opened");
+    }
+  }, [players, bidding, showsResults]);
+
   const handleOpen = () => {
-    const ps = players.slice();
-    ps.forEach(p => p.open = true);
-    setPlayers(ps);
-    setBidding(false);
+    setTimeout(() => {
+      socket.emit("opening");
+    }, 0);
   }
 
-  const handleNewGame = () => {
-    const ps = players.slice();
-    ps.forEach(p => {
-      p.open = false;
-      p.bid = "";
+  useEffect(() => {
+    socket.on("newgame_begun", (data: any) => {
+      console.log("The parent player has begun a new game.");
+      const updatedPlayers = players.slice();
+      updatedPlayers.forEach(p => {
+        p.open = false;
+        p.bid = "";
+      });
+      setPlayers(updatedPlayers);
+      setBidding(true);
+      setShowsResults(false);
     });
-    setPlayers(ps);
-    setBidding(true);
+    return () => {
+      socket.off("newgame_begun");
+    }
+  }, [players, bidding, showsResults]);
+
+  const handleNewGame = () => {
+    setTimeout(() => {
+      socket.emit("newgame");
+    }, 0);
   }
 
   const handleBidChange = (bid: string, idx: number) => {
@@ -104,15 +131,18 @@ export const TablePage: FunctionComponent<TableProps> = (props) => {
     }, 0);
   }
 
+  const isParent = props.playerId === 0;
+  const bids = players.map(p => p.bid);
+
   return (
     <>
       <header className="header">
         <span className="table-name">{props.tableName}</span>
       </header>
       <main>
-        <ParentOperations bidding={bidding}
-          onOpen={handleOpen} onNewGame={handleNewGame} />
-        <GameResults />
+        {isParent && <ParentOperations bidding={bidding}
+          onOpen={handleOpen} onNewGame={handleNewGame} />}
+        {showsResults && <GameResults bids={bids} />}
         <Players players={
           players.map((p, idx) => Object.assign(p,
             { onBidChange: (bid: string) => handleBidChange(bid, idx) }))

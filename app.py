@@ -129,6 +129,16 @@ def handle_bidding(player_id, bid):
     emit("bidded", payload, broadcast=True)
 
 
+@socketio.on("opening")
+def handle_opening():
+    emit("opened", broadcast=True)
+
+
+@socketio.on("newgame")
+def handle_opening():
+    emit("newgame_begun", broadcast=True)
+
+
 if __name__ == "__main__":
     # app.run(debug=True)
     socketio.run(app, debug=True)

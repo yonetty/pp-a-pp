@@ -22,6 +22,7 @@ export const ParentOperations: FunctionComponent<ParentOperationsProps> = (props
         disabled={!props.bidding} value="open"
         onClick={handleOpenButtonClick}>オープン</button>
       <button type="button" name="newgame" value="newgame"
+        disabled={props.bidding}
         onClick={handleNewGameButtonClick}>次のゲーム</button>
     </div>
   )
