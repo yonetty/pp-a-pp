@@ -7,8 +7,13 @@ export type GameResultsProps = {
 export const GameResults: FunctionComponent<GameResultsProps> = (props) => {
   const points: number[] = props.bids.filter(b => b).map(b => Number(b));
   // 平均値算出
-  const sum = points.reduce((p, c) => p + c, 0);
-  const avg = points.length === 0 ? 0 : sum / points.length;
+  const calcAvg = (array: number[]): number => {
+    const sum = array.reduce((p, c) => p + c, 0);
+    const avg = array.length === 0 ? 0 : sum / array.length;
+    return Math.round(avg * 10) / 10;
+  }
+  const avg = calcAvg(points);
+
   // 中央値算出
   const calcMedian = (array: number[]): number => {
     if (array.length === 0) {
