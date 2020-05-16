@@ -43,6 +43,10 @@ export const TablePage: FunctionComponent<TableProps> = (props) => {
         const players = mapPlayers(res.data.players, props.playerId);
         console.log(`Got ${players.length} players by ajax call.`)
         setPlayers(players);
+      }).then(() => {
+        // ルームを指定してWebSocket接続するためにイベント送出
+        console.log("Joining a room (web socket)")
+        socket.emit("join", props.tableId);
       }).catch((error) => {
         console.log("通信失敗")
         console.log(error.status);
@@ -94,7 +98,8 @@ export const TablePage: FunctionComponent<TableProps> = (props) => {
 
   const handleOpen = () => {
     setTimeout(() => {
-      socket.emit("opening");
+      console.log("Parent player is opening cards for table " + props.tableId);
+      socket.emit("opening", props.tableId);
     }, 0);
   }
 
@@ -117,7 +122,7 @@ export const TablePage: FunctionComponent<TableProps> = (props) => {
 
   const handleNewGame = () => {
     setTimeout(() => {
-      socket.emit("newgame");
+      socket.emit("newgame", props.tableId);
     }, 0);
   }
 
@@ -127,7 +132,7 @@ export const TablePage: FunctionComponent<TableProps> = (props) => {
     ps[idx].bid = bid;
     setPlayers(ps);
     setTimeout(() => {
-      socket.emit("bidding", idx, bid);
+      socket.emit("bidding", props.tableId, idx, bid);
     }, 0);
   }
 

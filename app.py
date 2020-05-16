@@ -2,7 +2,7 @@
 import os
 import redis
 from flask import Flask, render_template, request, redirect, jsonify, session
-from flask_socketio import SocketIO, emit
+from flask_socketio import SocketIO, emit, join_room
 import uuid
 
 app = Flask(__name__, static_folder="public", static_url_path="/")
@@ -103,7 +103,7 @@ def join_do(table_id):
 
     session["ses_player_id"] = table_id + "." + str(player_id)
 
-    broadcast_join(player_id, player_name)
+    broadcast_join(table_id, player_id, player_name)
 
     return redirect(f"/table/{table_id}")
 
@@ -116,27 +116,35 @@ def connect():
     print("Client connected")
 
 
-def broadcast_join(player_id, player_name):
-    print("broadcasting on player joinning..")
+@socketio.on("join")
+def join(table_id):
+    print(f"A player is joining {table_id}")
+    join_room(table_id)
+
+
+def broadcast_join(table_id, player_id, player_name):
+    print("Broadcasting on player joinning..")
     payload = {"playerId": player_id, "playerName": player_name}
-    socketio.emit("joined", payload, broadcast=True)
+    socketio.emit("joined", payload, room=table_id, broadcast=True)
 
 
 @socketio.on("bidding")
-def handle_bidding(player_id, bid):
+def handle_bidding(table_id, player_id, bid):
     payload = {"playerId": player_id, "bid": bid}
-    print(f"Player {player_id} has made a bid of {bid}, broadcasting...")
-    emit("bidded", payload, broadcast=True)
+    print(f"Player {player_id} has made a bid of {bid}, broadcasting in {table_id}...")
+    emit("bidded", payload, room=table_id, broadcast=True)
 
 
 @socketio.on("opening")
-def handle_opening():
-    emit("opened", broadcast=True)
+def handle_opening(table_id):
+    print(f"Opening cards, broadcasting in {table_id}...")
+    emit("opened", room=table_id, broadcast=True)
 
 
 @socketio.on("newgame")
-def handle_opening():
-    emit("newgame_begun", broadcast=True)
+def handle_newgame(table_id):
+    print(f"Starting a new game, broadcasting in {table_id}...")
+    emit("newgame_begun", room=table_id, broadcast=True)
 
 
 if __name__ == "__main__":
