@@ -1,6 +1,7 @@
 import React, { FunctionComponent, useState } from "react";
 import Modal from 'react-modal';
 import { Deck } from "./Deck";
+import { CSSTransition } from 'react-transition-group';
 
 Modal.setAppElement('#app');
 const customStyles = {
@@ -58,9 +59,12 @@ export const Player: FunctionComponent<PlayerProps> = (props) => {
         </div>
         <div className="player-name">{props.name}</div>
       </div>
-      <div className={`player-card ${playerCardOpen}`} onClick={props.isMe ? handleModalOpen : undefined}>
-        <span className="point">{point}</span>
-      </div>
+      <CSSTransition
+        in={props.open} appear={true} timeout={600} classNames="player-card-open-trans">
+        <div className={`player-card ${playerCardOpen}`} onClick={props.isMe ? handleModalOpen : undefined}>
+          <span className="point">{point}</span>
+        </div>
+      </CSSTransition>
       <Modal isOpen={modalIsOpen} onRequestClose={handleModalClose}
         contentLabel="test" style={customStyles} >
         <Deck points={points} onCardSelected={handleCardSelect} />
