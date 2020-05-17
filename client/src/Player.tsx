@@ -48,6 +48,7 @@ export const Player: FunctionComponent<PlayerProps> = (props) => {
   }
 
   const playerIsMe = props.isMe ? "player-me" : "";
+  const cardClickable = props.isMe && !props.open;
   const playerCardOpen = props.open ? "player-card-open" : "";
   // オープン前で入力済みの他ユーザーは?を表示する
   const point = (!props.open && !props.isMe && props.bid) ? "?" : props.bid;
@@ -61,7 +62,7 @@ export const Player: FunctionComponent<PlayerProps> = (props) => {
       </div>
       <CSSTransition
         in={props.open} appear={true} timeout={600} classNames="player-card-open-trans">
-        <div className={`player-card ${playerCardOpen}`} onClick={props.isMe ? handleModalOpen : undefined}>
+        <div className={`player-card ${playerCardOpen}`} onClick={cardClickable ? handleModalOpen : undefined}>
           <span className="point">{point}</span>
         </div>
       </CSSTransition>

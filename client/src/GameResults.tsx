@@ -1,6 +1,7 @@
 import React, { FunctionComponent, useState } from "react";
 
 export type GameResultsProps = {
+  show: boolean;
   bids: string[];
 }
 
@@ -30,11 +31,13 @@ export const GameResults: FunctionComponent<GameResultsProps> = (props) => {
     <div className="game-results">
       <div className="game-result">
         <span className="result-key">平均</span>
-        <span className="result-value">{avg}</span>
+        <span> </span>
+        <span className="result-value">{props.show ? avg : ""}</span>
       </div>
       <div className="game-result">
         <span className="result-key">中央値</span>
-        <span className="result-value">{median}</span>
+        <span> </span>
+        <span className="result-value">{props.show ? median : ""}</span>
       </div>
     </div>
   )

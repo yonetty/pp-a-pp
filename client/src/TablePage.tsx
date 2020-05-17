@@ -1,4 +1,4 @@
-import React, { FunctionComponent, useState, useEffect } from "react";
+import React, { FunctionComponent, useState, useEffect, useCallback } from "react";
 import { ParentOperations } from "./ParentOperations";
 import { GameResults } from "./GameResults";
 import { Players } from "./Players";
@@ -6,6 +6,7 @@ import { PlayerProps } from "./Player";
 import axios from 'axios';
 import io from 'socket.io-client';
 import { join } from "path";
+import { Commentary } from "./Commentary";
 
 type TableProps = {
   tableId: string;
@@ -32,10 +33,21 @@ const mapPlayer = (name: string, isMe: boolean, pos: number) => {
   }
 }
 
+// カスタムフック
+const useLogs = () => {
+  const [logs, setLogs] = useState<string[]>([]);
+  const addLog = useCallback((log: string) => {
+    const newLogs = [log].concat(logs);
+    setLogs(newLogs);
+  }, [logs]);
+  return [logs, addLog] as const;
+}
+
 export const TablePage: FunctionComponent<TableProps> = (props) => {
   const [bidding, setBidding] = useState(true);
   const [showsResults, setShowsResults] = useState(false);
   const [players, setPlayers] = useState<PlayerProps[]>([]);
+  const [logs, addLog] = useLogs();
 
   useEffect(() => {
     axios.get(`/table/${props.tableId}/players`)
@@ -63,11 +75,12 @@ export const TablePage: FunctionComponent<TableProps> = (props) => {
       const updatedPlayers = players.slice();
       updatedPlayers.push(joined);
       setPlayers(updatedPlayers);
+      addLog(`${data.playerName}さんが参加しました`);
     });
     return () => {
       socket.off("joined");
     }
-  }, [players]);
+  }, [players, logs]);
 
   useEffect(() => {
     socket.on("bidded", (data: any) => {
@@ -76,11 +89,15 @@ export const TablePage: FunctionComponent<TableProps> = (props) => {
       const updatedPlayer = { ...players[idx], ...{ bid: data.bid } };
       const updatedPlayers = players.map((p, i) => i === idx ? updatedPlayer : p);
       setPlayers(updatedPlayers);
+      const allPlayersBidded = players.every(p => p.bid);
+      if (allPlayersBidded) {
+        addLog("全プレイヤーが入札しました")
+      }
     });
     return () => {
       socket.off("bidded");
     }
-  }, [players]);
+  }, [players, logs]);
 
   useEffect(() => {
     socket.on("opened", (data: any) => {
@@ -90,11 +107,12 @@ export const TablePage: FunctionComponent<TableProps> = (props) => {
       setPlayers(updatedPlayers);
       setBidding(false);
       setShowsResults(true);
+      addLog("親プレイヤーが札をオープンしました");
     });
     return () => {
       socket.off("opened");
     }
-  }, [players, bidding, showsResults]);
+  }, [players, bidding, showsResults, logs]);
 
   const handleOpen = () => {
     setTimeout(() => {
@@ -114,11 +132,12 @@ export const TablePage: FunctionComponent<TableProps> = (props) => {
       setPlayers(updatedPlayers);
       setBidding(true);
       setShowsResults(false);
+      addLog("新しいゲームが始まりました")
     });
     return () => {
       socket.off("newgame_begun");
     }
-  }, [players, bidding, showsResults]);
+  }, [players, bidding, showsResults, logs]);
 
   const handleNewGame = () => {
     setTimeout(() => {
@@ -147,11 +166,12 @@ export const TablePage: FunctionComponent<TableProps> = (props) => {
       <main>
         {isParent && <ParentOperations bidding={bidding}
           onOpen={handleOpen} onNewGame={handleNewGame} />}
-        {showsResults && <GameResults bids={bids} />}
+        <GameResults show={showsResults} bids={bids} />
         <Players players={
           players.map((p, idx) => Object.assign(p,
             { onBidChange: (bid: string) => handleBidChange(bid, idx) }))
         } />
+        <Commentary logs={logs} />
       </main>
     </>
   )
