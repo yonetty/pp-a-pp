@@ -35,10 +35,12 @@ def index():
 def open():
     table_name = request.form["tablename"]
     parent_name = request.form["nickname"]
+    deck_type = request.form["decktype"]
     table_id = str(uuid.uuid4())
     player_id = 0  # 親は0とする
     db.hset(table_id, "name", table_name)
     db.hset(table_id, "players", parent_name)
+    db.hset(table_id, "deck", deck_type)
     db.expire(table_id, EX)
     print(f"new table opened: {table_id}")
     session["ses_player_id"] = table_id + "." + str(player_id)
@@ -62,11 +64,16 @@ def table(table_id):
 
     table_name = table["name"]
     players = table["players"]
+    deck_type = table["deck"]
     players_list = players.split(",")
     if len(players_list) <= player_id:
         return redirect("/")  # ここに到達することはないはず
     html = render_template(
-        "table.html", table_id=table_id, table_name=table_name, player_id=player_id
+        "table.html",
+        table_id=table_id,
+        table_name=table_name,
+        player_id=player_id,
+        deck_type=deck_type,
     )
     return html
 

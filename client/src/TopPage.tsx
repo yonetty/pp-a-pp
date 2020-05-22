@@ -14,6 +14,12 @@ export const TopPage: FunctionComponent = () => {
         <form className="openForm" action="/table/open" method="POST">
           <input name="tablename" type="text" required placeholder="場名" />
           <input name="nickname" type="text" required placeholder="ニックネーム" />
+          <select name="decktype" required>
+            <option value="" selected>--- デッキを選択 ---</option>
+            <option value="int">整数</option>
+            <option value="half">0.5刻み</option>
+            <option value="fibo">フィボナッチ</option>
+          </select>
           <input type="submit" value="場を開く" />
         </form>
       </main>

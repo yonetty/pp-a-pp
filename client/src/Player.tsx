@@ -30,8 +30,6 @@ export type PlayerProps = {
 
 export const Player: FunctionComponent<PlayerProps> = (props) => {
   const [modalIsOpen, setModalIsOpen] = useState(false);
-  //const [bid, setBid] = useState(props.bid);
-  const points = ["0", "1", "2", "3", "5", "8"];
 
   const handleModalOpen = () => {
     setModalIsOpen(true);
@@ -68,7 +66,7 @@ export const Player: FunctionComponent<PlayerProps> = (props) => {
       </CSSTransition>
       <Modal isOpen={modalIsOpen} onRequestClose={handleModalClose}
         contentLabel="test" style={customStyles} >
-        <Deck points={points} onCardSelected={handleCardSelect} />
+        <Deck onCardSelected={handleCardSelect} />
       </Modal>
     </div>
   )
