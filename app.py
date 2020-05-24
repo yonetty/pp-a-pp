@@ -7,6 +7,7 @@ import uuid
 
 app = Flask(__name__, static_folder="public", static_url_path="/")
 app.secret_key = "planningpoker"
+IS_DEBUG = False if os.environ.get("PRODUCTION") != None else True
 
 # SocketIO
 socketio = SocketIO(app, engineio_logger=app.logger, async_mode="eventlet")
@@ -156,4 +157,4 @@ def handle_newgame(table_id):
 
 if __name__ == "__main__":
     # app.run(debug=True)
-    socketio.run(app, debug=True)
+    socketio.run(app, debug=IS_DEBUG)
