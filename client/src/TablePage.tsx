@@ -5,7 +5,6 @@ import { Players } from "./Players";
 import { PlayerProps } from "./Player";
 import axios from 'axios';
 import io from 'socket.io-client';
-import { join } from "path";
 import { Commentary } from "./Commentary";
 
 type TableProps = {

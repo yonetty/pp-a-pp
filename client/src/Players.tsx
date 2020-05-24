@@ -1,4 +1,4 @@
-import React, { FunctionComponent, useState } from "react";
+import React, { FunctionComponent } from "react";
 import { Player, PlayerProps } from "./Player";
 
 type PlayersProps = {
