@@ -12,7 +12,7 @@ export const JoinPage: FunctionComponent<JoinPageProps> = (props) => {
       <header className="header">
         <h1 className="title">Planning Poker</h1>
         <p className="description">
-          「{props.tableName}」に参加してプラニング・ポーカーを行いましょう!<br />
+          「{props.tableName}」に参加してプラニングポーカーを行いましょう!<br />
             ニックネームを入力してください
         </p>
       </header>

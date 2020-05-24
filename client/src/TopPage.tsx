@@ -6,7 +6,7 @@ export const TopPage: FunctionComponent = () => {
       <header className="header">
         <h1 className="title">Planning Poker</h1>
         <p className="description">
-          チームメンバーでプラニング・ポーカーを行いましょう!<br />
+          チームメンバーでプラニングポーカーを行いましょう!<br />
             場名とニックネームを入力して開始します。
         </p>
       </header>
