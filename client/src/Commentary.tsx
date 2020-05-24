@@ -5,9 +5,9 @@ export type CommentaryProps = {
 }
 
 export const Commentary: FunctionComponent<CommentaryProps> = (props) => {
-  const items = props.logs.map((log) => {
+  const items = props.logs.map((log, idx) => {
     return (
-      <li>{log}</li>
+      <li key={idx}>{log}</li>
     );
   });
 

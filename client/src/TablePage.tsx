@@ -75,7 +75,7 @@ export const TablePage: FunctionComponent<TableProps> = (props) => {
       const updatedPlayers = players.slice();
       updatedPlayers.push(joined);
       setPlayers(updatedPlayers);
-      addLog(`${data.playerName}さんが参加しました`);
+      addLog(`${data.playerName} さんが参加しました`);
     });
     return () => {
       socket.off("joined");
@@ -89,7 +89,7 @@ export const TablePage: FunctionComponent<TableProps> = (props) => {
       const updatedPlayer = { ...players[idx], ...{ bid: data.bid } };
       const updatedPlayers = players.map((p, i) => i === idx ? updatedPlayer : p);
       setPlayers(updatedPlayers);
-      const allPlayersBidded = players.every(p => p.bid);
+      const allPlayersBidded = updatedPlayers.every(p => p.bid);
       if (allPlayersBidded) {
         addLog("全プレイヤーが入札しました")
       }

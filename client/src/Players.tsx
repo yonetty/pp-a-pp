@@ -6,9 +6,9 @@ type PlayersProps = {
 }
 
 export const Players: FunctionComponent<PlayersProps> = (props) => {
-  const players = props.players.map((player) => {
+  const players = props.players.map((player, idx) => {
     return (
-      <Player {...player} />
+      <Player {...player} key={idx} />
     );
   });
   return (
