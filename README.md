@@ -39,6 +39,11 @@
 ### Python
 * Python 3.7.6で動作確認しています。
 * venv等で仮想環境を構築してください。
+```bash
+$ cd pp-a-pp
+$ python -m venv venv
+$ source venv/bin/activate
+```
 * `requirements.txt` でパッケージを一括インストールします。
 ```bash
 $ pip install -r requirements.txt
@@ -56,6 +61,7 @@ $ yarn run build
 ### Flask
 * `app.py`を実行します
 ```bash
+$ cd ..
 $ python app.py
 ```
 * 以下のように表示されれば起動成功です
