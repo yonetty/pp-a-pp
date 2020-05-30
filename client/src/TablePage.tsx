@@ -6,6 +6,8 @@ import { PlayerProps } from "./Player";
 import axios from 'axios';
 import io from 'socket.io-client';
 import { Commentary } from "./Commentary";
+import { LanugageSelector } from "./LanguageSelector";
+import { useTranslation } from 'react-i18next';
 
 type TableProps = {
   tableId: string;
@@ -32,7 +34,7 @@ const mapPlayer = (name: string, isMe: boolean, pos: number) => {
   }
 }
 
-// カスタムフック
+// Custom hook
 const useLogs = () => {
   const [logs, setLogs] = useState<string[]>([]);
   const addLog = useCallback((log: string) => {
@@ -43,6 +45,19 @@ const useLogs = () => {
 }
 
 export const TablePage: FunctionComponent<TableProps> = (props) => {
+  // i18n
+  const [t, i18n] = useTranslation();
+  const languages = [{ code: "ja", name: "Japanese" }, { code: "en", name: "English" }];
+  const [currentLang, setCurrentLang] = useState("ja");
+  // Change language of i18n
+  useEffect(() => {
+    i18n.changeLanguage(currentLang);
+  }, [currentLang, i18n]);
+  // Handler
+  const handleLanguageSelectionChange = (lang: string) => {
+    setCurrentLang(lang);
+  }
+
   const [bidding, setBidding] = useState(true);
   const [showsResults, setShowsResults] = useState(false);
   const [players, setPlayers] = useState<PlayerProps[]>([]);
@@ -55,11 +70,10 @@ export const TablePage: FunctionComponent<TableProps> = (props) => {
         console.log(`Got ${players.length} players by ajax call.`)
         setPlayers(players);
       }).then(() => {
-        // ルームを指定してWebSocket接続するためにイベント送出
         console.log("Joining a room (web socket)")
         socket.emit("join", props.tableId);
       }).catch((error) => {
-        console.log("通信失敗")
+        console.log("Ajax failure.")
         console.log(error.status);
       });
     return () => {
@@ -74,7 +88,8 @@ export const TablePage: FunctionComponent<TableProps> = (props) => {
       const updatedPlayers = players.slice();
       updatedPlayers.push(joined);
       setPlayers(updatedPlayers);
-      addLog(`${data.playerName} さんが参加しました`);
+      const log = t('message.playerjoin', { player: data.playerName });
+      addLog(log);
     });
     return () => {
       socket.off("joined");
@@ -90,7 +105,8 @@ export const TablePage: FunctionComponent<TableProps> = (props) => {
       setPlayers(updatedPlayers);
       const allPlayersBidded = updatedPlayers.every(p => p.bid);
       if (allPlayersBidded) {
-        addLog("全プレイヤーが入札しました")
+        const log = t('message.allbid');
+        addLog(log);
       }
     });
     return () => {
@@ -106,7 +122,8 @@ export const TablePage: FunctionComponent<TableProps> = (props) => {
       setPlayers(updatedPlayers);
       setBidding(false);
       setShowsResults(true);
-      addLog("親プレイヤーが札をオープンしました");
+      const log = t('message.cardsopen');
+      addLog(log);
     });
     return () => {
       socket.off("opened");
@@ -131,7 +148,8 @@ export const TablePage: FunctionComponent<TableProps> = (props) => {
       setPlayers(updatedPlayers);
       setBidding(true);
       setShowsResults(false);
-      addLog("新しいゲームが始まりました")
+      const log = t('message.newgame');
+      addLog(log)
     });
     return () => {
       socket.off("newgame_begun");
@@ -161,6 +179,7 @@ export const TablePage: FunctionComponent<TableProps> = (props) => {
     <>
       <header className="header">
         <span className="table-name">{props.tableName}</span>
+        <LanugageSelector languages={languages} selectedLanguage={currentLang} onLanguageSelectionChange={handleLanguageSelectionChange} />
       </header>
       <main>
         {isParent && <ParentOperations bidding={bidding}

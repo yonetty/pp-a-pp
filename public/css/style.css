@@ -26,6 +26,32 @@ body {
     padding: 20px 10px 0;
 }
 
+.header .i18n {
+    position: absolute;
+    top: 10px;
+    right: 5%;
+}
+
+.header .i18n span {
+    padding: 5px;
+}
+
+.header .i18n span.i18n-selected {
+    color: #3919ee;
+    background-color: white;
+    font-weight: bold;
+}
+
+.header .i18n span:not(.i18n-selected) {
+    color: white;
+    background-color: #3919ee;
+}
+
+.header .i18n span:not(.i18n-selected):hover {
+    background-color: #462ecf;
+    cursor: pointer;
+}
+
 .header .description {
     color: azure;
     font-size: 1.8rem;

@@ -1,4 +1,5 @@
 import React, { FunctionComponent } from "react";
+import { useTranslation } from 'react-i18next';
 
 export type GameResultsProps = {
   show: boolean;
@@ -6,8 +7,11 @@ export type GameResultsProps = {
 }
 
 export const GameResults: FunctionComponent<GameResultsProps> = (props) => {
+  // i18n
+  const [t, i18n] = useTranslation();
   const points: number[] = props.bids.filter(b => b).map(b => Number(b));
-  // 平均値算出
+
+  // Calculate average
   const calcAvg = (array: number[]): number => {
     const sum = array.reduce((p, c) => p + c, 0);
     const avg = array.length === 0 ? 0 : sum / array.length;
@@ -15,7 +19,7 @@ export const GameResults: FunctionComponent<GameResultsProps> = (props) => {
   }
   const avg = calcAvg(points);
 
-  // 中央値算出
+  // Calculate median
   const calcMedian = (array: number[]): number => {
     if (array.length === 0) {
       return 0;
@@ -30,12 +34,12 @@ export const GameResults: FunctionComponent<GameResultsProps> = (props) => {
   return (
     <div className="game-results">
       <div className="game-result">
-        <span className="result-key">平均</span>
+        <span className="result-key">{t('label.average')}</span>
         <span> </span>
         <span className="result-value">{props.show ? avg : ""}</span>
       </div>
       <div className="game-result">
-        <span className="result-key">中央値</span>
+        <span className="result-key">{t('label.median')}</span>
         <span> </span>
         <span className="result-value">{props.show ? median : ""}</span>
       </div>

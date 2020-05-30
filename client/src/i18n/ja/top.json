@@ -1,0 +1,12 @@
+    {
+        "title": "Planning Poker",
+        "message.desc1": "チームメンバーでプラニングポーカーを行いましょう!",
+        "message.desc2": "場名とニックネームを入力して開始します。",
+        "placeholder.tablename": "場名",
+        "placeholder.nickname": "ニックネーム(日本語可)",
+        "option.decktype.default": "--- デッキを選択 ---",
+        "option.decktype.int": "整数",
+        "option.decktype.half": "0.5刻み",
+        "option.decktype.fibo": "フィボナッチ",
+        "button.opentable": "場を開く"
+    }

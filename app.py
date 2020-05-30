@@ -23,7 +23,7 @@ pool = redis.ConnectionPool.from_url(
     REDIS_URL, db=DATABASE_INDEX, decode_responses=True
 )
 db = redis.StrictRedis(connection_pool=pool)
-EX = 86400  # 1日
+EX = 86400  # 1 day
 
 
 @app.route("/")
@@ -38,7 +38,7 @@ def open():
     parent_name = request.form["nickname"]
     deck_type = request.form["decktype"]
     table_id = str(uuid.uuid4())
-    player_id = 0  # 親は0とする
+    player_id = 0  # 0 means ID of the parent player
     db.hset(table_id, "name", table_name)
     db.hset(table_id, "players", parent_name)
     db.hset(table_id, "deck", deck_type)
@@ -56,11 +56,11 @@ def table(table_id):
         return redirect("/")
     if not "ses_player_id" in session:
         print("session not found, redirecting to top page...")
-        return redirect(f"/table/{table_id}/join")  # 新しいプレイヤー
+        return redirect(f"/table/{table_id}/join")  # New player
     ses_table_id, ses_player_id = session["ses_player_id"].split(".")
     if ses_table_id != table_id:
         print(f"joinning new table {table_id}")
-        return redirect(f"/table/{table_id}/join")  # 別の場に新しいプレイヤーとして参加
+        return redirect(f"/table/{table_id}/join")  # Join another table as a new player
     player_id = int(ses_player_id)
 
     table_name = table["name"]
@@ -68,7 +68,7 @@ def table(table_id):
     deck_type = table["deck"]
     players_list = players.split(",")
     if len(players_list) <= player_id:
-        return redirect("/")  # ここに到達することはないはず
+        return redirect("/")  # Never reached here
     html = render_template(
         "table.html",
         table_id=table_id,

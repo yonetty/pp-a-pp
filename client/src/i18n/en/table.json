@@ -1,0 +1,11 @@
+    {
+        "message.playerjoin": "{{player}} has joined.",
+        "message.allbid": "All players have bid.",
+        "message.cardsopen": "The parent player has opened cards.",
+        "message.newgame": "New game has begun.",
+        "placeholder.nickname": "Your nickname",
+        "label.average": "Average:",
+        "label.median": "Median:",
+        "button.opencards": "Open cards",
+        "button.nextgame": "New game"
+    }

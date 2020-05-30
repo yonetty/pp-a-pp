@@ -48,7 +48,7 @@ export const Player: FunctionComponent<PlayerProps> = (props) => {
   const playerIsMe = props.isMe ? "player-me" : "";
   const cardClickable = props.isMe && !props.open;
   const playerCardOpen = props.open ? "player-card-open" : "";
-  // オープン前で入力済みの他ユーザーは?を表示する
+  // Until the parent player opens cards, it displays '?' for other players who have bid
   const point = (!props.open && !props.isMe && props.bid) ? "?" : props.bid;
 
   return (

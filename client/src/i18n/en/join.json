@@ -1,0 +1,12 @@
+{
+    "title": "Planning Poker",
+    "message.desc1": "Join {{table}} and play planning poker!",
+    "message.desc2": "Enter your nickname to join.",
+    "placeholder.tablename": "Table name",
+    "placeholder.nickname": "Your nickname",
+    "option.decktype.default": "--- Select deck type ---",
+    "option.decktype.int": "integer",
+    "option.decktype.half": "0.5 steps",
+    "option.decktype.fibo": "fibonacci",
+    "button.opentable": "Open a table"
+}

@@ -1,0 +1,11 @@
+    {
+        "message.playerjoin": "{{player}}　さんが参加しました",
+        "message.allbid": "全プレイヤーが入札しました",
+        "message.cardsopen": "親プレイヤーが札をオープンしました",
+        "message.newgame": "新しいゲームが始まりました",
+        "placeholder.nickname": "ニックネーム(日本語可)",
+        "label.average": "平均値",
+        "label.median": "中央値",
+        "button.opencards": "オープン",
+        "button.nextgame": "次のゲーム"
+    }

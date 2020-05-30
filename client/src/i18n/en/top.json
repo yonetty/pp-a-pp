@@ -1,0 +1,12 @@
+{
+    "title": "Planning Poker",
+    "message.desc1": "Let's play planning poker with your team!",
+    "message.desc2": "Enter table name and nickname to start.",
+    "placeholder.tablename": "Table name",
+    "placeholder.nickname": "Your nickname",
+    "option.decktype.default": "--- Select deck type ---",
+    "option.decktype.int": "integer",
+    "option.decktype.half": "0.5 steps",
+    "option.decktype.fibo": "fibonacci",
+    "button.opentable": "Open a table"
+}
