@@ -1,4 +1,5 @@
 # Planning Poker App (PP-A-PP)
+[English version is here](./README_en.md)
 
 ## 概要
 * プラニングポーカーを題材としたReactサンプルアプリです。
